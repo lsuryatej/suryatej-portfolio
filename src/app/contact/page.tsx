@@ -67,9 +67,17 @@ export default function ContactPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormState("loading");
-    // Simulate — swap for your email service (Resend, Formspree, etc.)
-    await new Promise((r) => setTimeout(r, 1200));
-    setFormState("success");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error("Failed");
+      setFormState("success");
+    } catch {
+      setFormState("error");
+    }
   };
 
   const update = (field: keyof typeof formData) => (
@@ -187,6 +195,16 @@ export default function ContactPage() {
               value={formData.message}
               onChange={update("message")}
             />
+
+            {formState === "error" && (
+              <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                Something went wrong. Please try again or email me directly at{" "}
+                <a href={`mailto:${personal.email}`} className="underline underline-offset-4">
+                  {personal.email}
+                </a>
+                .
+              </p>
+            )}
 
             <button
               type="submit"
