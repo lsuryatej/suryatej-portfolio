@@ -1,14 +1,47 @@
 export const projects = [
   {
-    id: "operational-intelligence",
-    title: "Operational Intelligence for Digital Marketplaces",
+    id: "late-delivery-prediction",
+    title: "Late Delivery Prediction",
     description:
-      "A predictive framework for the Olist ecosystem: demand forecasting, seller performance modelling, and supply chain intelligence at scale.",
-    tags: ["Python", "ML", "Data Strategy", "Predictive Modelling"],
+      "Predicts which marketplace orders will arrive late. LightGBM on a large Brazilian e-commerce dataset. The core fix was a temporal train/test split that removed data leakage, lifting test ROC-AUC from 0.558 to 0.641.",
+    tags: ["Python", "LightGBM", "ML", "Feature Engineering"],
     github: "https://github.com/lsuryatej/Operational-Intelligence-for-Digital-Marketplace",
     live: null,
     featured: true,
     type: "ml",
+  },
+  {
+    id: "task-environment-builder",
+    title: "Task Environment Builder",
+    description:
+      "Built structured task environments for an AI coding platform: reproducible Docker-based setups paired with automated verifiers that objectively grade task completion. Each environment ships as a prompt/environment/verifier triple.",
+    tags: ["Docker", "Python", "AI", "Automation"],
+    github: null,
+    live: null,
+    featured: true,
+    type: "tool",
+  },
+  {
+    id: "mcp-skill-router",
+    title: "MCP Skill Router",
+    description:
+      "Routes agent requests to the right Claude skill based on intent. Merged into an open-source skills repo.",
+    tags: ["MCP", "Claude", "Agent Tooling", "TypeScript"],
+    github: null,
+    live: null,
+    featured: true,
+    type: "tool",
+  },
+  {
+    id: "pre-market-legal-briefing",
+    title: "Pre-Market Legal Briefing",
+    description:
+      "Daily intelligence system for NSE/BSE trading. Scans court filings and rulings, filters to a strict 7-day signal window, surfaces scrips likely to move on legal catalysts.",
+    tags: ["Python", "Finance", "Automation", "Data"],
+    github: null,
+    live: null,
+    featured: true,
+    type: "tool",
   },
   {
     id: "market-etl",
@@ -22,6 +55,17 @@ export const projects = [
     type: "data",
   },
   {
+    id: "mac-healthkit",
+    title: "mac-healthkit",
+    description:
+      "Open-source Mac diagnostic toolkit. Bash scripts plus a launchd daemon that logs system health to CSV and fires threshold-based notifications when memory or disk pressure crosses limits.",
+    tags: ["Bash", "macOS", "launchd", "System Diagnostics"],
+    github: "https://github.com/lsuryatej/mac-healthkit",
+    live: null,
+    featured: true,
+    type: "tool",
+  },
+  {
     id: "brahmi-antigravity",
     title: "Brahmi Antigravity",
     description:
@@ -31,39 +75,6 @@ export const projects = [
     live: null,
     featured: true,
     type: "creative",
-  },
-  {
-    id: "linkedin-job-automator",
-    title: "LinkedIn Job Automator",
-    description:
-      "Chrome extension that autonomously finds, enriches, and auto-applies to LinkedIn jobs. Handles search, profile matching, and application flow end-to-end.",
-    tags: ["Chrome Extension", "Automation", "AI"],
-    github: "https://github.com/lsuryatej/linkedin-job-automator",
-    live: null,
-    featured: true,
-    type: "tool",
-  },
-  {
-    id: "desire-hiresign",
-    title: "desire-hiresign",
-    description:
-      "A swipe-based job discovery app for designers. Creatives showcase portfolios, recruiters post roles. Both sides can like, match, and chat, making hiring a visual, engaging experience.",
-    tags: ["Python", "Product", "UX", "Creative"],
-    github: "https://github.com/lsuryatej/desire-hiresign",
-    live: null,
-    featured: false,
-    type: "creative",
-  },
-  {
-    id: "bank-deposit-ml",
-    title: "Bank Term Deposit Prediction",
-    description:
-      "Evaluates synthetic data as a privacy-preserving alternative to real customer data for predicting bank term deposit subscriptions. Explores GAN-generated data quality.",
-    tags: ["Python", "ML", "Synthetic Data", "Privacy"],
-    github: "https://github.com/lsuryatej/ML-Project-Predicting-Bank-Term-Deposit-Subscriptions-",
-    live: null,
-    featured: false,
-    type: "ml",
   },
 ];
 
@@ -75,11 +86,12 @@ export const experience = [
     description:
       "Working in the AI modelling group on customer protection and financial intelligence. I build production ML models for fraud detection and customer risk scoring, design ETL pipelines on GCP, and recently shipped a dynamic knowledge graph framework using Neo4j. Also won recognition at the Reboot Hackathon for a Trusted Access platform designed for digitally underserved customers.",
     highlights: [
-      "Improved classification precision by ~5-8% on a production customer propensity model",
+      "Improved classification precision by ~5-8% on a production customer fraud propensity model (LightGBM/XGBoost)",
+      "Built a model monitoring framework: PSI-based drift detection, feature drift tracking, decile stability checks",
       "Cut pipeline failures by 70% with redesigned ETL on Dataflow + BigQuery",
-      "Led migration of critical pipelines from on-prem to BigQuery, delivering 2x scalability",
-      "Refactored FSCS batch processing, shaving 4+ hours off runtime",
-      "Built a Neo4j knowledge graph framework for messy, unstructured data",
+      "Led migration of critical pipelines from on-prem to BigQuery, 2x scalability",
+      "Refactored FSCS regulatory batch processing, shaving 4+ hours off runtime",
+      "Built MCP skill-router tooling and a Neo4j knowledge graph framework for unstructured data",
     ],
     skills: ["Python", "GCP", "BigQuery", "Dataflow", "Neo4j", "ML Ops"],
   },
@@ -128,6 +140,7 @@ export const skills = {
     "Cloud Run",
     "Terraform",
     "Vertex AI",
+    "Kubeflow",
   ],
   "Data Engineering": [
     "Apache Beam",
@@ -148,6 +161,12 @@ export const skills = {
     "Git",
     "REST APIs",
     "Microservices",
+  ],
+  "LLMs & Agents": [
+    "MCP",
+    "Claude Skills",
+    "Agent Tooling",
+    "LangChain",
   ],
 };
 
