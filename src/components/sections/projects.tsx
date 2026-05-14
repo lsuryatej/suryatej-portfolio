@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { ArrowRight, Github } from "lucide-react";
+import { ArrowRight, Github, ExternalLink } from "lucide-react";
 import { projects } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
@@ -163,21 +163,38 @@ function ProjectRow({
                     {tag}
                   </span>
                 ))}
-                {project.github && (
-                  <a
-                    href={project.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={cn(
-                      "ml-auto flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs transition-colors",
-                      accent.text,
-                      "hover:underline underline-offset-2"
-                    )}
-                  >
-                    <Github size={12} />
-                    <span>Source</span>
-                  </a>
-                )}
+                <div className="ml-auto flex items-center gap-2">
+                  {project.live && (
+                    <a
+                      href={project.live}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(
+                        "flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs transition-colors",
+                        accent.text,
+                        "hover:underline underline-offset-2"
+                      )}
+                    >
+                      <ExternalLink size={12} />
+                      <span>Live</span>
+                    </a>
+                  )}
+                  {project.github && (
+                    <a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(
+                        "flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs transition-colors",
+                        accent.text,
+                        "hover:underline underline-offset-2"
+                      )}
+                    >
+                      <Github size={12} />
+                      <span>Source</span>
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </div>

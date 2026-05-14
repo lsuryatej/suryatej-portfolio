@@ -67,12 +67,12 @@ export const projects = [
   },
   {
     id: "brahmi-antigravity",
-    title: "Brahmi Antigravity",
+    title: "Brahmi",
     description:
       "Website for an Indian clothing brand. Built with TypeScript, focused on visual storytelling and brand identity.",
     tags: ["TypeScript", "Web", "Brand", "Creative"],
     github: "https://github.com/lsuryatej/Brahmi-Antigravity",
-    live: null,
+    live: "https://wearbrahmi.com",
     featured: true,
     type: "creative",
   },
