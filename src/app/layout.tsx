@@ -1,34 +1,35 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Cormorant_Garamond, DM_Mono, Instrument_Sans } from "next/font/google";
 import "./globals.css";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-geist-sans",
+const cormorantGaramond = Cormorant_Garamond({
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
-  subsets: ["latin"],
-  weight: "400",
+  weight: ["300", "400", "500", "600"],
   style: ["normal", "italic"],
 });
 
+const dmMono = DM_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+});
+
+const instrumentSans = Instrument_Sans({
+  variable: "--font-sans",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
+
 export const metadata: Metadata = {
-  title: "Suryatej Lalam | ML Engineer",
+  title: "Suryatej Lalam — ML Engineer",
   description:
-    "Machine Learning Engineer building intelligent systems and data pipelines. Based in Hyderabad, India.",
-  keywords: ["ML Engineer", "Machine Learning", "Data Engineering", "GCP", "BigQuery", "AI"],
+    "ML Engineer building production systems for fraud detection and financial intelligence. Based in Hyderabad, India.",
+  keywords: ["ML Engineer", "Machine Learning", "Data Engineering", "GCP", "BigQuery", "AI", "Fraud Detection"],
   authors: [{ name: "Suryatej Lalam" }],
   openGraph: {
-    title: "Suryatej Lalam | ML Engineer",
-    description: "Building intelligent systems. Occasionally, creative ones.",
+    title: "Suryatej Lalam — ML Engineer",
+    description: "Production ML. Systems that ship.",
     type: "website",
   },
 };
@@ -39,9 +40,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
-        className={`${plusJakartaSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased noise`}
+        className={`${cormorantGaramond.variable} ${dmMono.variable} ${instrumentSans.variable} antialiased`}
       >
         {children}
       </body>

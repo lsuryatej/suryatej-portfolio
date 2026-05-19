@@ -27,7 +27,7 @@ function InputField({
       <input
         id={id}
         required={required}
-        className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] px-4 py-3 text-[var(--text-primary)] placeholder-[var(--text-faint)] outline-none transition-all focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.1)]"
+        className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] px-4 py-3 text-[var(--text-primary)] placeholder-[var(--text-faint)] outline-none transition-all focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(184,134,11,0.12)]"
         {...props}
       />
     </div>
@@ -53,7 +53,7 @@ function TextareaField({
         id={id}
         required={required}
         rows={5}
-        className="w-full resize-none rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] px-4 py-3 text-[var(--text-primary)] placeholder-[var(--text-faint)] outline-none transition-all focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.1)]"
+        className="w-full resize-none rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] px-4 py-3 text-[var(--text-primary)] placeholder-[var(--text-faint)] outline-none transition-all focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(184,134,11,0.12)]"
         {...props}
       />
     </div>
@@ -86,17 +86,6 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen py-20">
-      {/* Grid bg */}
-      <div className="grid-bg pointer-events-none fixed inset-0 opacity-30" />
-
-      {/* Violet glow */}
-      <div
-        className="pointer-events-none fixed -top-40 left-1/2 -translate-x-1/2 h-[400px] w-[600px] rounded-full"
-        style={{
-          background: "radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 70%)",
-        }}
-      />
-
       <div className="relative mx-auto max-w-2xl px-6">
         {/* Back link */}
         <motion.div
@@ -120,7 +109,7 @@ export default function ContactPage() {
           transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className="mb-12"
         >
-          <p className="mono-tag mb-3 text-[var(--accent-light)]">Get in touch</p>
+          <p className="mono-tag mb-3 text-[var(--accent)]">Get in touch</p>
           <h1 className="display text-[clamp(2.5rem,8vw,5rem)] text-[var(--text-primary)]">
             Say hello.
           </h1>
@@ -146,7 +135,7 @@ export default function ContactPage() {
             </p>
             <button
               onClick={() => setFormState("idle")}
-              className="mt-6 text-sm text-[var(--accent-light)] underline-offset-4 hover:underline"
+              className="mt-6 text-sm text-[var(--accent)] underline-offset-4 hover:underline"
             >
               Send another
             </button>

@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { personal } from "@/lib/data";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 const interests = [
   "Machine Learning Systems",
@@ -14,94 +15,57 @@ const interests = [
 ];
 
 export default function About() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
   return (
     <section id="about" className="py-32">
-      <div className="section-divider mb-32" />
+      <div className="section-rule mb-16 mx-auto max-w-6xl px-6" style={{ margin: "0 auto 4rem" }} />
       <div className="mx-auto max-w-6xl px-6">
-        <div ref={ref} className="grid gap-20 lg:grid-cols-[1fr_380px]">
-          {/* Left */}
-          <div>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={inView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.5 }}
-              className="mono-tag mb-3 text-[var(--accent-light)]"
-            >
-              About
-            </motion.p>
-            <motion.h2
-              initial={{ opacity: 0, y: 16 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="display mb-10 text-[clamp(2.5rem,6vw,5rem)] text-[var(--text-primary)]"
-            >
-              A little about me.
-            </motion.h2>
+        {/* Section header */}
+        <div className="mb-4">
+          <p className="mono-tag text-[var(--accent)]">About</p>
+        </div>
+        <div className="section-rule mb-16" />
 
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.25 }}
-              className="space-y-4 text-lg leading-relaxed text-[var(--text-muted)]"
-            >
+        <div className="grid gap-20 lg:grid-cols-[1fr_380px]">
+          {/* Left — bio */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5, ease: EASE }}
+          >
+            <div className="space-y-5 text-[1.125rem] leading-relaxed text-[var(--text-muted)]" style={{ fontFamily: "var(--font-sans)" }}>
               <p>{personal.bio}</p>
               <p>
                 I care about systems that are actually usable, not just technically sound. That
                 means thinking about the product, the data, and the model together rather than in
                 isolation.
               </p>
-              <p>
-                Currently open to new opportunities. If you&apos;re building something interesting
-                in the ML/AI or data space,{" "}
-                <a
-                  href="/contact"
-                  className="text-[var(--accent-light)] underline-offset-4 transition-colors hover:underline"
-                >
-                  let&apos;s talk
-                </a>
-                .
-              </p>
-            </motion.div>
-          </div>
+            </div>
+          </motion.div>
 
-          {/* Right — interests */}
+          {/* Right — interests list */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5, delay: 0.15, ease: EASE }}
           >
-            <p className="mono-tag mb-6 text-[var(--text-muted)]">Interests</p>
+            <p className="mono-tag mb-6 text-[var(--text-faint)]">Interests</p>
             <ul className="space-y-3">
               {interests.map((item, i) => (
                 <motion.li
                   key={item}
-                  initial={{ opacity: 0, x: 12 }}
-                  animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.4, delay: 0.4 + i * 0.06 }}
-                  className="flex items-center gap-3 text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+                  initial={{ opacity: 0, y: 8 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.2 + i * 0.05, ease: EASE }}
+                  className="mono-tag flex items-center gap-3 text-[var(--text-muted)] transition-colors duration-200 hover:text-[var(--text-primary)]"
                 >
-                  <span className="h-px w-5 bg-[var(--accent)] flex-shrink-0" />
+                  <span style={{ color: "var(--accent)" }}>—</span>
                   {item}
                 </motion.li>
               ))}
             </ul>
-
-            {/* Fact card */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.8 }}
-              className="mt-10 rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] p-5"
-            >
-              <p className="mono-tag mb-1 text-[var(--accent-light)]">Currently</p>
-              <p className="text-sm text-[var(--text-muted)] leading-relaxed">
-                Building AI agents, exploring creative ML applications, and looking for the next
-                interesting problem to solve.
-              </p>
-            </motion.div>
           </motion.div>
         </div>
       </div>

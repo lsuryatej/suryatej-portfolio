@@ -1,199 +1,87 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
-import Link from "next/link";
-import { ArrowRight, Github, Linkedin } from "lucide-react";
 import { personal } from "@/lib/data";
-import { cn } from "@/lib/utils";
-
-/* ─── Magnetic button ─────────────────────────────────────────── */
-function MagneticButton({
-  children,
-  href,
-  className,
-  external,
-}: {
-  children: React.ReactNode;
-  href: string;
-  className?: string;
-  external?: boolean;
-}) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 300, damping: 25 });
-  const sy = useSpring(y, { stiffness: 300, damping: 25 });
-
-  const onMove = (e: React.MouseEvent) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    x.set((e.clientX - cx) * 0.3);
-    y.set((e.clientY - cy) * 0.3);
-  };
-
-  const onLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  return (
-    <motion.a
-      ref={ref}
-      href={href}
-      style={{ x: sx, y: sy }}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
-      className={cn("inline-flex select-none", className)}
-      whileTap={{ scale: 0.97 }}
-    >
-      {children}
-    </motion.a>
-  );
-}
-
-/* ─── Animated word ──────────────────────────────────────────── */
-function AnimWord({ word, delay }: { word: string; delay: number }) {
-  return (
-    <motion.span
-      className="inline-block"
-      initial={{ y: 60, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
-    >
-      {word}
-    </motion.span>
-  );
-}
 
 export default function Hero() {
-  const nameWords = personal.name.split(" ");
-
   return (
     <section className="relative min-h-screen overflow-hidden">
-      {/* Grid bg */}
-      <div className="grid-bg absolute inset-0 opacity-40" />
-
-      {/* Violet glow blob */}
-      <div
-        className="pointer-events-none absolute -top-40 -right-40 h-[600px] w-[600px] rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle at center, rgba(124,58,237,0.12) 0%, transparent 70%)",
-        }}
-      />
-
       {/* Content */}
-      <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col justify-end px-6 pb-16 pt-24 md:pb-20 md:pt-32">
-        {/* Role tag */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mb-8 flex items-center gap-3"
-        >
-          <span className="mono-tag text-[var(--accent-light)]">[ {personal.role} ]</span>
-          <span className="mono-tag text-[var(--text-muted)]">·</span>
-          <span className="mono-tag text-[var(--text-muted)]">{personal.location}</span>
-        </motion.div>
-
-        {/* Name */}
-        <h1 className="display mb-6 text-[clamp(4rem,12vw,11rem)] leading-none text-[var(--text-primary)]">
-          {nameWords.map((word, i) => (
-            <span key={i} className="mr-[0.15em] inline-block overflow-hidden pb-[0.15em]">
-              <AnimWord word={word} delay={0.2 + i * 0.12} />
-            </span>
-          ))}
-        </h1>
-
-        {/* Divider */}
-        <motion.div
-          initial={{ scaleX: 0, opacity: 0 }}
-          animate={{ scaleX: 1, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-          className="section-divider mb-8 origin-left"
-        />
-
-        {/* Bottom row */}
-        <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
-          {/* Tagline */}
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.65 }}
-            className="max-w-sm text-lg text-[var(--text-muted)] leading-relaxed"
-          >
-            {personal.tagline}
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.75 }}
-            className="flex flex-wrap items-center gap-4"
-          >
-            <MagneticButton
-              href="#projects"
-              className="group items-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3 text-sm font-medium text-white transition-all hover:bg-[var(--accent-light)]"
+      <div className="mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-6 pb-16 pt-24">
+        <div className="grid gap-16 lg:grid-cols-[3fr_2fr] lg:items-start">
+          {/* Left: Display statement */}
+          <div className="flex flex-col justify-center">
+            <h1
+              className="display text-[var(--text-primary)]"
+              style={{ fontSize: "clamp(3.5rem, 8vw, 7rem)" }}
             >
-              View Work
-              <ArrowRight
-                size={14}
-                className="transition-transform group-hover:translate-x-0.5"
-              />
-            </MagneticButton>
+              Production ML.
+              <br />
+              Systems that ship.
+            </h1>
 
-            <MagneticButton
-              href="/contact"
-              className="items-center rounded-full border border-[var(--border)] px-6 py-3 text-sm font-medium text-[var(--text-muted)] transition-all hover:border-[var(--text-muted)] hover:text-[var(--text-primary)]"
-            >
-              Say hello
-            </MagneticButton>
+            {/* Amber rule */}
+            <div
+              className="mt-8 mb-6"
+              style={{ height: "1px", background: "var(--accent)", width: "100%" }}
+            />
 
-            {/* Social links */}
-            <div className="flex items-center gap-3">
+            {/* One-liner tagline */}
+            <p className="mono-tag text-[var(--text-muted)]">{personal.tagline}</p>
+
+            {/* Plain text links */}
+            <div className="mt-10 flex items-center gap-8">
               <a
-                href={personal.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+                href="#projects"
+                className="mono-tag text-[var(--text-muted)] transition-colors duration-200 hover:text-[var(--text-primary)]"
               >
-                <Github size={18} />
+                View work ↓
               </a>
               <a
-                href={personal.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+                href="/contact"
+                className="mono-tag text-[var(--text-muted)] transition-colors duration-200 hover:text-[var(--text-primary)]"
               >
-                <Linkedin size={18} />
+                Contact →
               </a>
             </div>
-          </motion.div>
+          </div>
+
+          {/* Right: Vertical meta stack */}
+          <div className="flex flex-col gap-6 lg:pt-3">
+            <div>
+              <p className="mono-tag text-[var(--accent)] mb-1">Location</p>
+              <p className="mono-tag text-[var(--text-muted)]">{personal.location}</p>
+            </div>
+            <div className="section-rule" />
+            <div>
+              <p className="mono-tag text-[var(--accent)] mb-1">Role</p>
+              <p className="mono-tag text-[var(--text-muted)]">{personal.role}</p>
+            </div>
+            <div className="section-rule" />
+            <div>
+              <p className="mono-tag text-[var(--accent)] mb-1">Status</p>
+              <p className="mono-tag text-[var(--text-muted)]">Available</p>
+            </div>
+            <div className="section-rule" />
+            <div>
+              <p className="mono-tag text-[var(--accent)] mb-1">Current</p>
+              <p className="mono-tag text-[var(--text-muted)]">Lloyds Technology Centre</p>
+            </div>
+          </div>
         </div>
 
-        {/* Scroll hint */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-            className="mono-tag flex flex-col items-center gap-2 text-[var(--text-faint)]"
-          >
-            <span>scroll</span>
-            <div className="h-8 w-px bg-gradient-to-b from-[var(--border)] to-transparent" />
-          </motion.div>
-        </motion.div>
+        {/* Scroll indicator */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+          <span className="mono-tag text-[var(--text-faint)]">scroll</span>
+          <div
+            style={{
+              width: "1px",
+              height: "2rem",
+              background: "var(--border)",
+            }}
+          />
+        </div>
       </div>
     </section>
   );
 }
+
