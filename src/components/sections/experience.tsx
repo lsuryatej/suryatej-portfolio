@@ -1,116 +1,143 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { experience, education, certifications, skills } from "@/lib/data";
-import { Award, GraduationCap } from "lucide-react";
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+/* Key metrics extracted from experience highlights */
+const keyMetrics = [
+  { value: "~7%", label: "PRECISION GAIN" },
+  { value: "70%", label: "FEWER FAILURES" },
+  { value: "4hrs", label: "RUNTIME SAVED" },
+  { value: "2×", label: "SCALABILITY" },
+];
 
 export default function Experience() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
   return (
-    <section id="experience" className="py-32">
-      <div className="section-divider mb-32" />
-      <div className="mx-auto max-w-6xl px-6">
-        <div ref={ref}>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.5 }}
-            className="mono-tag mb-3 text-[var(--accent-light)]"
-          >
-            Experience & Skills
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="display mb-16 text-[clamp(2.5rem,6vw,5rem)] text-[var(--text-primary)]"
-          >
-            What I&apos;ve been up to.
-          </motion.h2>
-        </div>
+    <section id="experience" className="py-24">
+      {/* Top rule */}
+      <div className="section-rule-strong mb-0" />
 
+      <div className="mx-auto max-w-6xl px-6">
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, ease: EASE }}
+          className="py-6 mb-8"
+        >
+          <h2 className="display text-[clamp(2rem,5vw,3rem)] text-[var(--text-primary)]">
+            EXPERIENCE
+          </h2>
+        </motion.div>
+
+        {/* Two-column layout */}
         <div className="grid gap-16 lg:grid-cols-[1fr_1px_1fr]">
-          {/* Left column — Work + Education + Certs */}
-          <div className="space-y-14">
-            {/* Work */}
-            <div>
-              <p className="mono-tag mb-8 text-[var(--text-muted)]">Work</p>
-              <div className="space-y-10">
-                {experience.map((job, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-60px" }}
-                    transition={{ duration: 0.5, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <div className="mb-2 flex items-start justify-between gap-4">
-                      <div>
-                        <h3 className="font-semibold text-[var(--text-primary)]">{job.role}</h3>
-                        <p className="text-sm text-[var(--accent-light)]">{job.company}</p>
+          {/* Left column: Work */}
+          <div>
+            {experience.map((job, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.4, delay: i * 0.1, ease: EASE }}
+                className="mb-12"
+              >
+                {/* Metric strip */}
+                <div className="grid grid-cols-4 gap-4 mb-8 pb-6 border-b border-[var(--border)]">
+                  {keyMetrics.map((m) => (
+                    <div key={m.label}>
+                      <div
+                        className="editorial font-semibold leading-none mb-1"
+                        style={{
+                          fontSize: "clamp(1.5rem, 3vw, 2.5rem)",
+                          color: "var(--accent)",
+                        }}
+                      >
+                        {m.value}
                       </div>
-                      <span className="mono-tag flex-shrink-0 text-[var(--text-muted)]">
-                        {job.period}
-                      </span>
+                      <div className="data-text text-[var(--text-faint)]">{m.label}</div>
                     </div>
-                    <p className="mb-3 text-sm leading-relaxed text-[var(--text-muted)]">
-                      {job.description}
-                    </p>
-                    {job.highlights && (
-                      <ul className="mb-3 space-y-1.5">
-                        {job.highlights.map((h, hi) => (
-                          <li
-                            key={hi}
-                            className="flex items-start gap-2 text-sm text-[var(--text-muted)]"
-                          >
-                            <span className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-[var(--accent)]" />
-                            {h}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {job.skills.map((s) => (
-                        <span
-                          key={s}
-                          className="mono-tag rounded border border-[var(--border)] bg-[var(--bg)] px-2 py-0.5 text-[var(--text-muted)]"
-                        >
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
+                  ))}
+                </div>
+
+                {/* Role header */}
+                <div className="mb-4 flex items-start justify-between gap-4">
+                  <div>
+                    <h3
+                      className="editorial font-semibold text-[var(--text-primary)] text-lg leading-snug"
+                    >
+                      {job.role}
+                    </h3>
+                    <p className="data-text text-[var(--accent)]">{job.company}</p>
+                  </div>
+                  <span className="data-text flex-shrink-0 text-[var(--text-faint)]">
+                    {job.period}
+                  </span>
+                </div>
+
+                {/* Description */}
+                <p
+                  className="text-sm leading-relaxed text-[var(--text-muted)] mb-5"
+                  style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+                >
+                  {job.description}
+                </p>
+
+                {/* Highlights */}
+                {job.highlights && (
+                  <ul className="mb-5 space-y-2">
+                    {job.highlights.map((h, hi) => (
+                      <li
+                        key={hi}
+                        className="flex items-start gap-2 text-sm text-[var(--text-muted)]"
+                        style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+                      >
+                        <span className="mt-2 h-1 w-1 flex-shrink-0 rounded-full bg-[var(--accent)]" />
+                        {h}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {/* Skills comma-separated */}
+                <p className="data-text text-[var(--text-faint)]">
+                  {job.skills.join(", ")}
+                </p>
+              </motion.div>
+            ))}
 
             {/* Education */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.4, ease: EASE }}
+              className="mb-10"
             >
-              <p className="mono-tag mb-6 text-[var(--text-muted)]">Education</p>
+              <p className="data-text mb-4 text-[var(--text-faint)]">EDUCATION</p>
               {education.map((edu, i) => (
-                <div key={i} className="flex items-start gap-3">
-                  <GraduationCap
-                    size={16}
-                    className="mt-0.5 flex-shrink-0 text-[var(--accent-light)]"
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between gap-4">
-                      <div>
-                        <h4 className="font-medium text-[var(--text-primary)]">{edu.school}</h4>
-                        <p className="text-sm text-[var(--text-muted)]">{edu.degree}</p>
-                      </div>
-                      <span className="mono-tag flex-shrink-0 text-[var(--text-muted)]">
-                        {edu.period}
-                      </span>
+                <div key={i} className="mb-4">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h4
+                        className="editorial font-semibold text-[var(--text-primary)]"
+                      >
+                        {edu.school}
+                      </h4>
+                      <p
+                        className="text-sm text-[var(--text-muted)]"
+                        style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+                      >
+                        {edu.degree}
+                      </p>
                     </div>
+                    <span className="data-text flex-shrink-0 text-[var(--text-faint)]">
+                      {edu.period}
+                    </span>
                   </div>
                 </div>
               ))}
@@ -118,27 +145,24 @@ export default function Experience() {
 
             {/* Certifications */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.4, ease: EASE }}
             >
-              <p className="mono-tag mb-6 text-[var(--text-muted)]">Certifications</p>
-              <div className="space-y-4">
+              <p className="data-text mb-4 text-[var(--text-faint)]">CERTIFICATIONS</p>
+              <div className="space-y-3">
                 {certifications.map((cert, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <Award
-                      size={16}
-                      className="mt-0.5 flex-shrink-0 text-[var(--accent-light)]"
-                    />
-                    <div>
-                      <h4 className="font-medium text-[var(--text-primary)]">{cert.title}</h4>
-                      <p className="text-sm text-[var(--text-muted)]">
-                        {cert.issuer}
-                        <span className="mx-1.5 text-[var(--border)]">·</span>
-                        {cert.period}
-                      </p>
-                    </div>
+                  <div key={i}>
+                    <h4
+                      className="text-sm font-medium text-[var(--text-primary)]"
+                      style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+                    >
+                      {cert.title}
+                    </h4>
+                    <p className="data-text text-[var(--text-faint)]">
+                      {cert.issuer} · {cert.period}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -148,40 +172,31 @@ export default function Experience() {
           {/* Vertical divider */}
           <div className="hidden lg:block bg-[var(--border)]" />
 
-          {/* Right column — Skills */}
+          {/* Right column: Stack */}
           <div>
-            <p className="mono-tag mb-8 text-[var(--text-muted)]">Stack</p>
+            <p className="data-text mb-8 text-[var(--text-faint)]">STACK</p>
             <div className="space-y-8">
               {Object.entries(skills).map(([category, items], catIndex) => (
                 <motion.div
                   key={category}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
                   transition={{
-                    duration: 0.5,
-                    delay: catIndex * 0.08,
-                    ease: [0.16, 1, 0.3, 1],
+                    duration: 0.4,
+                    delay: catIndex * 0.07,
+                    ease: EASE,
                   }}
                 >
-                  <p className="mono-tag mb-3 text-[var(--accent-light)]">{category}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {items.map((skill, skillIndex) => (
-                      <motion.span
-                        key={skill}
-                        initial={{ opacity: 0, scale: 0.92 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{
-                          duration: 0.3,
-                          delay: catIndex * 0.06 + skillIndex * 0.03,
-                        }}
-                        className="rounded-lg border border-[var(--border)] bg-[var(--bg-surface)] px-3 py-1.5 text-sm text-[var(--text-muted)] transition-all hover:border-[var(--accent)] hover:text-[var(--text-primary)]"
-                      >
-                        {skill}
-                      </motion.span>
-                    ))}
-                  </div>
+                  <p className="display text-[1.2rem] text-[var(--text-primary)] mb-2">
+                    {category}
+                  </p>
+                  <p
+                    className="text-sm text-[var(--text-muted)] leading-relaxed"
+                    style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+                  >
+                    {items.join(", ")}
+                  </p>
                 </motion.div>
               ))}
             </div>

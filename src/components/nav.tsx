@@ -1,10 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const sections = [
+  { id: "projects", label: "SELECTED WORK" },
+  { id: "about", label: "ABOUT" },
+  { id: "experience", label: "EXPERIENCE" },
+];
 
 const links = [
   { href: "#projects", label: "Work" },
@@ -14,18 +20,10 @@ const links = [
 ];
 
 export default function Nav() {
-  const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    const sections = ["projects", "about", "experience"];
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -34,94 +32,65 @@ export default function Nav() {
       },
       { threshold: 0.3 }
     );
-    sections.forEach((id) => {
+    sections.forEach(({ id }) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
     return () => observer.disconnect();
   }, []);
 
-  // Close menu on route change / scroll
   useEffect(() => {
     if (mobileOpen) setMobileOpen(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSection]);
+
+  const activeSectionLabel =
+    sections.find((s) => s.id === activeSection)?.label ?? "";
 
   return (
     <>
-      <motion.header
-        initial={{ y: -16, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-          scrolled || mobileOpen
-            ? "border-b border-[var(--border)] bg-[rgba(8,8,8,0.95)] backdrop-blur-xl"
-            : "bg-transparent"
-        )}
-      >
-        <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
-          {/* Monogram */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-[var(--bg)] border-b-2 border-[var(--text-primary)]">
+        <nav className="flex h-10 items-center justify-between px-6">
+          {/* Left: monogram */}
           <Link
             href="/"
-            className="mono-tag text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+            className="display text-[1.4rem] text-[var(--text-primary)] leading-none tracking-widest hover:text-[var(--accent)] transition-colors duration-150"
           >
             SL
           </Link>
 
-          {/* Desktop links */}
-          <ul className="hidden items-center gap-1 md:flex">
-            {links.map(({ href, label }) => {
-              const sectionId = href.replace("#", "");
-              const isActive = activeSection === sectionId;
-              return (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    className={cn(
-                      "mono-tag relative px-3 py-1.5 transition-colors",
-                      isActive
-                        ? "text-[var(--text-primary)]"
-                        : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
-                    )}
-                  >
-                    {isActive && (
-                      <motion.span
-                        layoutId="nav-indicator"
-                        className="absolute inset-0 rounded-md bg-[var(--bg-surface)]"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-                      />
-                    )}
-                    <span className="relative">{label}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-
-          {/* Right side */}
-          <div className="flex items-center gap-4">
-            {/* Available badge — desktop only */}
-            <div className="hidden items-center gap-2 md:flex">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-              </span>
-              <span className="mono-tag text-[var(--text-muted)]">Available</span>
-            </div>
-
-            {/* Mobile: available dot + hamburger */}
-            <span className="relative flex h-2 w-2 md:hidden">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-            </span>
-            <button
-              onClick={() => setMobileOpen((o) => !o)}
-              className="flex items-center justify-center text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] md:hidden"
-              aria-label="Toggle menu"
+          {/* Center: active section label — desktop only */}
+          <div className="hidden md:flex absolute left-1/2 -translate-x-1/2">
+            <span
+              className={cn(
+                "display text-[0.85rem] tracking-widest transition-colors duration-150",
+                activeSection ? "text-[var(--accent)]" : "text-[var(--text-faint)]"
+              )}
             >
-              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
+              {activeSectionLabel || "SIGNAL / NOISE"}
+            </span>
           </div>
+
+          {/* Right: available + year */}
+          <div className="hidden md:flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--accent)]" />
+              </span>
+              <span className="data-text text-[var(--text-muted)]">AVAILABLE</span>
+            </div>
+            <span className="data-text text-[var(--text-faint)]">2025</span>
+          </div>
+
+          {/* Mobile: hamburger */}
+          <button
+            onClick={() => setMobileOpen((o) => !o)}
+            className="flex items-center justify-center text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] md:hidden"
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </nav>
 
         {/* Mobile dropdown */}
@@ -131,8 +100,8 @@ export default function Nav() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="overflow-hidden border-t border-[var(--border)] md:hidden"
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden border-t border-[var(--border)] md:hidden bg-[var(--bg)]"
             >
               <ul className="flex flex-col px-6 py-4 gap-1">
                 {links.map(({ href, label }) => (
@@ -140,7 +109,7 @@ export default function Nav() {
                     <Link
                       href={href}
                       onClick={() => setMobileOpen(false)}
-                      className="mono-tag block py-3 text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+                      className="data-text block py-3 text-[var(--text-muted)] transition-colors hover:text-[var(--accent)]"
                     >
                       {label}
                     </Link>
@@ -150,7 +119,7 @@ export default function Nav() {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.header>
+      </header>
     </>
   );
 }

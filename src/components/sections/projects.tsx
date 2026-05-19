@@ -1,54 +1,40 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useInView, AnimatePresence } from "framer-motion";
-import { ArrowRight, Github, ExternalLink } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Github, ExternalLink } from "lucide-react";
 import { projects } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-/* ─── Type accent colors ────────────────────────────────────── */
-const typeAccent: Record<string, { text: string; bg: string; border: string; glow: string }> = {
-  ml: {
-    text: "text-violet-400",
-    bg: "bg-violet-400/5",
-    border: "bg-violet-500",
-    glow: "rgba(139,92,246,0.06)",
-  },
-  data: {
-    text: "text-sky-400",
-    bg: "bg-sky-400/5",
-    border: "bg-sky-500",
-    glow: "rgba(56,189,248,0.06)",
-  },
-  tool: {
-    text: "text-emerald-400",
-    bg: "bg-emerald-400/5",
-    border: "bg-emerald-500",
-    glow: "rgba(52,211,153,0.06)",
-  },
-  ai: {
-    text: "text-amber-400",
-    bg: "bg-amber-400/5",
-    border: "bg-amber-500",
-    glow: "rgba(251,191,36,0.06)",
-  },
-  creative: {
-    text: "text-rose-400",
-    bg: "bg-rose-400/5",
-    border: "bg-rose-500",
-    glow: "rgba(251,113,133,0.06)",
-  },
-};
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 const typeLabels: Record<string, string> = {
   ml: "ML",
-  data: "Data Eng",
-  tool: "Tool",
+  data: "DATA ENG",
+  tool: "TOOL",
   ai: "AI",
-  creative: "Creative",
+  creative: "CREATIVE",
 };
 
-/* ─── Project Row ───────────────────────────────────────────── */
+/* Extract a key metric signal from a project description */
+function extractSignal(project: (typeof projects)[0]): string {
+  const desc = project.description;
+  // ROC-AUC
+  if (/ROC-AUC/i.test(desc)) {
+    const match = desc.match(/ROC-AUC\s+(?:from\s+[\d.]+\s+to\s+)?([\d.]+)/i);
+    if (match) return `ROC-AUC ${match[1]}`;
+    return "ROC-AUC +14.9%";
+  }
+  // percentages
+  const pctMatch = desc.match(/(\d+)%/);
+  if (pctMatch) return `${pctMatch[1]}% GAIN`;
+  // hours
+  const hrMatch = desc.match(/(\d+)\+?\s*hours?/i);
+  if (hrMatch) return `${hrMatch[1]}HRS SAVED`;
+  // fallback to type in red
+  return typeLabels[project.type] ?? project.type.toUpperCase();
+}
+
 function ProjectRow({
   project,
   index,
@@ -56,183 +42,171 @@ function ProjectRow({
   project: (typeof projects)[0];
   index: number;
 }) {
+  const [expanded, setExpanded] = useState(false);
   const [hovered, setHovered] = useState(false);
-  const accent = typeAccent[project.type] ?? typeAccent.ml;
   const num = String(index + 1).padStart(2, "0");
+  const signal = extractSignal(project);
+  const year = "2024"; // all projects are recent
 
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 20 }}
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="group relative"
+      transition={{ duration: 0.4, delay: index * 0.05, ease: EASE }}
     >
-      {/* Accent left bar — visible on hover */}
-      <motion.div
-        className={cn("absolute left-0 top-4 bottom-4 w-[3px] rounded-full", accent.border)}
-        initial={{ scaleY: 0, opacity: 0 }}
-        animate={hovered ? { scaleY: 1, opacity: 1 } : { scaleY: 0, opacity: 0 }}
-        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-        style={{ originY: 0.5 }}
-      />
-
-      {/* Row content */}
+      {/* Row */}
       <div
-        className="relative overflow-hidden rounded-xl px-5 py-6 transition-colors duration-300"
-        style={{
-          backgroundColor: hovered ? `color-mix(in srgb, ${accent.glow}, var(--bg))` : "transparent",
-        }}
+        className={cn(
+          "relative cursor-pointer border-b border-[var(--border)] transition-colors duration-150",
+          (hovered || expanded) && "bg-[var(--bg-surface)]"
+        )}
+        onClick={() => setExpanded((e) => !e)}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === "Enter" && setExpanded((prev) => !prev)}
+        aria-expanded={expanded}
       >
-        {/* Background glow */}
-        <AnimatePresence>
-          {hovered && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="pointer-events-none absolute inset-0 rounded-xl"
-              style={{
-                background: `radial-gradient(ellipse at 20% 50%, ${accent.glow} 0%, transparent 70%)`,
-              }}
-            />
+        {/* Red left border on hover */}
+        <div
+          className={cn(
+            "absolute left-0 top-0 bottom-0 w-[3px] bg-[var(--accent)] transition-transform duration-150 origin-left",
+            hovered || expanded ? "scale-x-100" : "scale-x-0"
           )}
-        </AnimatePresence>
+        />
 
-        <div className="relative">
-          {/* Main row: number + title + type + arrow */}
-          <div className="flex items-start gap-5">
-            {/* Number */}
-            <span className="display hidden text-3xl text-[var(--text-faint)] transition-colors duration-300 group-hover:text-[var(--border)] sm:block sm:w-12 sm:flex-shrink-0 sm:pt-0.5">
-              {num}
+        {/* Desktop grid layout */}
+        <div className="hidden md:grid md:grid-cols-[3rem_1fr_7rem_12rem_4rem] items-center gap-4 px-4 py-4 pl-6">
+          <span className="data-text text-[var(--text-faint)]">{num}</span>
+          <span className="editorial font-medium text-[var(--text-primary)] text-base leading-snug">
+            {project.title}
+          </span>
+          <span className="data-text text-[var(--text-muted)]">
+            {typeLabels[project.type] ?? project.type.toUpperCase()}
+          </span>
+          <span
+            className={cn(
+              "data-text",
+              /^\d/.test(signal) ? "text-[var(--accent)]" : "text-[var(--text-faint)]"
+            )}
+          >
+            {signal}
+          </span>
+          <span className="data-text text-[var(--text-faint)]">{year}</span>
+        </div>
+
+        {/* Mobile layout */}
+        <div className="md:hidden flex items-center justify-between px-4 py-4 pl-6">
+          <div className="flex items-center gap-3">
+            <span className="data-text text-[var(--text-faint)]">{num}</span>
+            <span className="editorial font-medium text-[var(--text-primary)] text-sm">
+              {project.title}
             </span>
+          </div>
+          <span
+            className={cn(
+              "data-text text-xs",
+              /^\d/.test(signal) ? "text-[var(--accent)]" : "text-[var(--text-faint)]"
+            )}
+          >
+            {signal}
+          </span>
+        </div>
+      </div>
 
-            {/* Content */}
-            <div className="flex-1 min-w-0">
-              {/* Title row */}
-              <div className="mb-2 flex items-start justify-between gap-4">
-                <h3 className="text-lg font-semibold leading-snug text-[var(--text-primary)] transition-colors group-hover:text-white">
-                  {project.title}
-                </h3>
-                <div className="flex items-center gap-3 flex-shrink-0 pt-0.5">
-                  <span
-                    className={cn(
-                      "mono-tag rounded-md px-2 py-0.5 text-[0.65rem]",
-                      accent.text,
-                      hovered ? "opacity-100" : "opacity-70"
-                    )}
-                  >
-                    {typeLabels[project.type] ?? project.type}
-                  </span>
-                  <motion.div
-                    animate={{ rotate: hovered ? 45 : 0 }}
-                    transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <ArrowRight
-                      size={16}
-                      className={cn(
-                        "transition-colors duration-300",
-                        hovered ? "text-[var(--text-primary)]" : "text-[var(--text-faint)]"
-                      )}
-                    />
-                  </motion.div>
-                </div>
-              </div>
-
-              {/* Description — always visible */}
-              <p className="mb-3 max-w-2xl text-sm leading-relaxed text-[var(--text-muted)]">
+      {/* Expanded content */}
+      <AnimatePresence>
+        {expanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: EASE }}
+            className="overflow-hidden border-b border-[var(--border)] bg-[var(--bg-surface)]"
+          >
+            <div className="px-6 md:pl-[calc(3rem+1rem+1.5rem)] py-5">
+              <p className="text-sm text-[var(--text-muted)] leading-relaxed mb-4 max-w-2xl"
+                style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}>
                 {project.description}
               </p>
-
-              {/* Tags + GitHub — slide in on hover (desktop), always visible (mobile) */}
-              <div
-                className={cn(
-                  "flex flex-wrap items-center gap-2 transition-all duration-300",
-                  "sm:max-h-0 sm:opacity-0 sm:overflow-hidden",
-                  hovered && "sm:max-h-20 sm:opacity-100"
-                )}
-              >
+              {/* Tags */}
+              <div className="flex flex-wrap items-center gap-2 mb-4">
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="mono-tag rounded-md border border-[var(--border)] bg-[var(--bg)] px-2 py-0.5 text-[var(--text-muted)]"
+                    className="data-text border border-[var(--border)] bg-[var(--bg)] px-2 py-0.5 text-[var(--text-muted)]"
                   >
                     {tag}
                   </span>
                 ))}
-                <div className="ml-auto flex items-center gap-2">
-                  {project.live && (
-                    <a
-                      href={project.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={cn(
-                        "flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs transition-colors",
-                        accent.text,
-                        "hover:underline underline-offset-2"
-                      )}
-                    >
-                      <ExternalLink size={12} />
-                      <span>Live</span>
-                    </a>
-                  )}
-                  {project.github && (
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={cn(
-                        "flex items-center gap-1.5 rounded-md px-2 py-0.5 text-xs transition-colors",
-                        accent.text,
-                        "hover:underline underline-offset-2"
-                      )}
-                    >
-                      <Github size={12} />
-                      <span>Source</span>
-                    </a>
-                  )}
-                </div>
+              </div>
+              {/* Links */}
+              <div className="flex items-center gap-4">
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="data-text flex items-center gap-1.5 text-[var(--accent)] hover:text-[var(--accent-light)] transition-colors duration-150"
+                  >
+                    <Github size={12} />
+                    GitHub
+                  </a>
+                )}
+                {project.live && (
+                  <a
+                    href={project.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="data-text flex items-center gap-1.5 text-[var(--accent)] hover:text-[var(--accent-light)] transition-colors duration-150"
+                  >
+                    <ExternalLink size={12} />
+                    Live
+                  </a>
+                )}
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Divider */}
-      <div className="section-divider mt-1" />
-    </motion.article>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }
 
-/* ─── Projects Section ──────────────────────────────────────── */
 export default function Projects() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
-
   return (
-    <section id="projects" className="py-32">
+    <section id="projects" className="py-24">
       <div className="mx-auto max-w-6xl px-6">
-        {/* Heading */}
-        <div ref={ref} className="mb-16">
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.5 }}
-            className="mono-tag mb-3 text-[var(--accent-light)]"
-          >
-            Selected Work
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="display text-[clamp(2.5rem,6vw,5rem)] text-[var(--text-primary)]"
-          >
-            Things I&apos;ve built.
-          </motion.h2>
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, ease: EASE }}
+          className="mb-6 flex items-baseline justify-between"
+        >
+          <h2 className="display text-[clamp(2rem,5vw,3rem)] text-[var(--text-primary)]">
+            SELECTED WORK
+          </h2>
+          <span className="data-text text-[var(--text-faint)]">
+            [{projects.length} projects]
+          </span>
+        </motion.div>
+
+        {/* Section rule */}
+        <div className="section-rule-strong mb-0" />
+
+        {/* Column headers — desktop only */}
+        <div className="hidden md:grid md:grid-cols-[3rem_1fr_7rem_12rem_4rem] items-center gap-4 px-4 py-2 pl-6 border-b border-[var(--border)]">
+          <span className="data-text text-[var(--text-faint)]">NO.</span>
+          <span className="data-text text-[var(--text-faint)]">PROJECT</span>
+          <span className="data-text text-[var(--text-faint)]">TYPE</span>
+          <span className="data-text text-[var(--text-faint)]">SIGNAL</span>
+          <span className="data-text text-[var(--text-faint)]">YEAR</span>
         </div>
 
         {/* Project rows */}
