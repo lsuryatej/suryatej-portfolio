@@ -13,6 +13,14 @@ const links = [
   { href: "/contact", label: "Contact" },
 ];
 
+const sectionLabels: Record<string, string> = {
+  projects: "Selected Work",
+  about: "About",
+  experience: "Experience & Skills",
+};
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("");
@@ -41,35 +49,49 @@ export default function Nav() {
     return () => observer.disconnect();
   }, []);
 
-  // Close menu on route change / scroll
   useEffect(() => {
     if (mobileOpen) setMobileOpen(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeSection]);
 
   return (
     <>
       <motion.header
-        initial={{ y: -16, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, ease: EASE }}
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
           scrolled || mobileOpen
-            ? "border-b border-[var(--border)] bg-[rgba(8,8,8,0.95)] backdrop-blur-xl"
+            ? "border-b border-[var(--border)] bg-[rgba(242,237,228,0.95)] backdrop-blur-sm"
             : "bg-transparent"
         )}
       >
-        <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
+        <nav className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6 relative">
           {/* Monogram */}
           <Link
             href="/"
-            className="mono-tag text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+            className="mono-tag text-[var(--text-muted)] transition-colors duration-200 hover:text-[var(--text-primary)]"
           >
             SL
           </Link>
 
+          {/* Center: active section label — desktop only */}
+          <div className="absolute left-1/2 -translate-x-1/2 hidden md:block pointer-events-none">
+            <span
+              className={cn(
+                "display text-[0.9rem] transition-colors duration-300",
+                activeSection
+                  ? "text-[var(--text-muted)]"
+                  : "text-[var(--text-faint)]"
+              )}
+            >
+              {sectionLabels[activeSection] ?? ""}
+            </span>
+          </div>
+
           {/* Desktop links */}
-          <ul className="hidden items-center gap-1 md:flex">
+          <ul className="hidden items-center gap-6 md:flex">
             {links.map(({ href, label }) => {
               const sectionId = href.replace("#", "");
               const isActive = activeSection === sectionId;
@@ -78,50 +100,27 @@ export default function Nav() {
                   <Link
                     href={href}
                     className={cn(
-                      "mono-tag relative px-3 py-1.5 transition-colors",
+                      "mono-tag transition-colors duration-200",
                       isActive
-                        ? "text-[var(--text-primary)]"
+                        ? "text-[var(--accent)]"
                         : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                     )}
                   >
-                    {isActive && (
-                      <motion.span
-                        layoutId="nav-indicator"
-                        className="absolute inset-0 rounded-md bg-[var(--bg-surface)]"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.4 }}
-                      />
-                    )}
-                    <span className="relative">{label}</span>
+                    {label}
                   </Link>
                 </li>
               );
             })}
           </ul>
 
-          {/* Right side */}
-          <div className="flex items-center gap-4">
-            {/* Available badge — desktop only */}
-            <div className="hidden items-center gap-2 md:flex">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-              </span>
-              <span className="mono-tag text-[var(--text-muted)]">Available</span>
-            </div>
-
-            {/* Mobile: available dot + hamburger */}
-            <span className="relative flex h-2 w-2 md:hidden">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-            </span>
-            <button
-              onClick={() => setMobileOpen((o) => !o)}
-              className="flex items-center justify-center text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)] md:hidden"
-              aria-label="Toggle menu"
-            >
-              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
-          </div>
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileOpen((o) => !o)}
+            className="flex items-center justify-center text-[var(--text-muted)] transition-colors duration-200 hover:text-[var(--text-primary)] md:hidden"
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
         </nav>
 
         {/* Mobile dropdown */}
@@ -131,21 +130,30 @@ export default function Nav() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.25, ease: EASE }}
               className="overflow-hidden border-t border-[var(--border)] md:hidden"
             >
               <ul className="flex flex-col px-6 py-4 gap-1">
-                {links.map(({ href, label }) => (
-                  <li key={href}>
-                    <Link
-                      href={href}
-                      onClick={() => setMobileOpen(false)}
-                      className="mono-tag block py-3 text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
-                    >
-                      {label}
-                    </Link>
-                  </li>
-                ))}
+                {links.map(({ href, label }) => {
+                  const sectionId = href.replace("#", "");
+                  const isActive = activeSection === sectionId;
+                  return (
+                    <li key={href}>
+                      <Link
+                        href={href}
+                        onClick={() => setMobileOpen(false)}
+                        className={cn(
+                          "mono-tag block py-3 transition-colors duration-200",
+                          isActive
+                            ? "text-[var(--accent)]"
+                            : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                        )}
+                      >
+                        {label}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </motion.div>
           )}

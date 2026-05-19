@@ -1,68 +1,52 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Github, Linkedin, Mail } from "lucide-react";
 import { personal } from "@/lib/data";
 
 export default function Footer() {
   return (
-    <footer className="py-20">
-      <div className="section-divider mb-20" />
+    <footer className="py-12">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="flex flex-col items-center gap-10 text-center">
-          {/* CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <p className="mono-tag mb-4 text-[var(--accent-light)]">Let&apos;s connect</p>
-            <h2 className="display text-[clamp(2rem,5vw,4rem)] text-[var(--text-primary)]">
-              Got something in mind?
-            </h2>
-          </motion.div>
+        <div className="section-rule mb-8" />
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          {/* Left: name + available */}
+          <div className="flex items-center gap-3">
+            <span className="display text-[1.4rem] text-[var(--accent)] leading-none">
+              Suryatej Lalam
+            </span>
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[var(--accent)] opacity-50" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-[var(--accent)]" />
+            </span>
+            <span className="mono-tag text-[var(--text-muted)]">Available</span>
+          </div>
 
-          <motion.a
-            href={`mailto:${personal.email}`}
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="group flex items-center gap-2 text-xl text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
-          >
-            <Mail size={20} />
-            <span className="underline-offset-4 group-hover:underline">{personal.email}</span>
-          </motion.a>
-
-          {/* Socials */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex items-center gap-6"
-          >
+          {/* Right: links */}
+          <div className="flex items-center gap-6">
+            <a
+              href={`mailto:${personal.email}`}
+              className="mono-tag text-[var(--text-faint)] transition-colors duration-200 hover:text-[var(--text-muted)]"
+            >
+              Email
+            </a>
             <a
               href={personal.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+              className="mono-tag text-[var(--text-faint)] transition-colors duration-200 hover:text-[var(--text-muted)]"
             >
-              <Github size={20} />
+              GitHub
             </a>
             <a
               href={personal.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
+              className="mono-tag text-[var(--text-faint)] transition-colors duration-200 hover:text-[var(--text-muted)]"
             >
-              <Linkedin size={20} />
+              LinkedIn
             </a>
-          </motion.div>
-
-          {/* Bottom */}
-          <div className="section-divider w-full" />
+          </div>
+        </div>
+        <div className="mt-6 pt-4 border-t border-[var(--border)]">
           <p className="mono-tag text-[var(--text-faint)]">
             © {new Date().getFullYear()} {personal.name}
           </p>
