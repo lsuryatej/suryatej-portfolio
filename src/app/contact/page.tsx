@@ -27,7 +27,7 @@ function InputField({
       <input
         id={id}
         required={required}
-        className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] px-4 py-3 text-[var(--text-primary)] placeholder-[var(--text-faint)] outline-none transition-all focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.1)]"
+        className="w-full border border-[var(--border)] bg-[var(--bg-surface)] px-4 py-3 text-[var(--text-primary)] placeholder-[var(--text-faint)] outline-none transition-all focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(184,134,11,0.12)]"
         {...props}
       />
     </div>
@@ -53,7 +53,7 @@ function TextareaField({
         id={id}
         required={required}
         rows={5}
-        className="w-full resize-none rounded-xl border border-[var(--border)] bg-[var(--bg-surface)] px-4 py-3 text-[var(--text-primary)] placeholder-[var(--text-faint)] outline-none transition-all focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(124,58,237,0.1)]"
+        className="w-full resize-none border border-[var(--border)] bg-[var(--bg-surface)] px-4 py-3 text-[var(--text-primary)] placeholder-[var(--text-faint)] outline-none transition-all focus:border-[var(--accent)] focus:shadow-[0_0_0_3px_rgba(184,134,11,0.12)]"
         {...props}
       />
     </div>
@@ -86,17 +86,6 @@ export default function ContactPage() {
 
   return (
     <main className="min-h-screen py-20">
-      {/* Grid bg */}
-      <div className="grid-bg pointer-events-none fixed inset-0 opacity-30" />
-
-      {/* Violet glow */}
-      <div
-        className="pointer-events-none fixed -top-40 left-1/2 -translate-x-1/2 h-[400px] w-[600px] rounded-full"
-        style={{
-          background: "radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 70%)",
-        }}
-      />
-
       <div className="relative mx-auto max-w-2xl px-6">
         {/* Back link */}
         <motion.div
@@ -135,7 +124,7 @@ export default function ContactPage() {
             initial={{ opacity: 0, scale: 0.96 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            className="rounded-2xl border border-[var(--border)] bg-[var(--bg-surface)] p-10 text-center"
+            className="border border-[var(--border)] bg-[var(--bg-surface)] p-10 text-center"
           >
             <div className="mb-4 text-4xl">✦</div>
             <h2 className="mb-2 text-xl font-semibold text-[var(--text-primary)]">
@@ -210,8 +199,8 @@ export default function ContactPage() {
               type="submit"
               disabled={formState === "loading"}
               className={cn(
-                "group flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-3.5 font-medium text-white transition-all",
-                "hover:bg-[var(--accent-light)] disabled:opacity-60 disabled:cursor-not-allowed"
+                "group flex w-full items-center justify-center gap-2 bg-[var(--text-primary)] px-6 py-3.5 font-medium text-[var(--bg)] transition-all mono-tag",
+                "hover:bg-[var(--accent)] hover:text-[var(--bg)] disabled:opacity-60 disabled:cursor-not-allowed"
               )}
             >
               {formState === "loading" ? (

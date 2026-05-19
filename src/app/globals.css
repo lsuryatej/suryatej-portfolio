@@ -2,17 +2,27 @@
 
 /* ─── Design Tokens ───────────────────────────────────────────── */
 :root {
-  --bg: #080808;
-  --bg-surface: #111111;
-  --bg-surface-2: #181818;
-  --border: #1f1f1f;
-  --border-subtle: #161616;
-  --text-primary: #f0f0f0;
-  --text-muted: #6b7280;
-  --text-faint: #333333;
-  --accent: #7c3aed;
-  --accent-light: #a78bfa;
-  --accent-glow: rgba(124, 58, 237, 0.15);
+  /* Backgrounds — warm cream */
+  --bg: #F2EDE4;
+  --bg-surface: #E8E0D0;
+  --bg-surface-2: #DDD6C4;
+
+  /* Borders */
+  --border: #C8BAA0;
+  --border-subtle: #DDD6C8;
+
+  /* Text — dark warm tones */
+  --text-primary: #1A1205;
+  --text-muted: #5C4A2A;
+  --text-faint: #9D8B72;
+
+  /* Amber — structural (labels, nav, hover bar, category headers) */
+  --accent: #B8860B;
+  --accent-light: #D4A42A;
+
+  /* Red — signals (available, metric numbers, signal values) */
+  --signal: #C0392B;
+  --signal-light: #E05A4A;
 }
 
 @theme inline {
@@ -24,9 +34,10 @@
   --color-muted: var(--text-muted);
   --color-accent: var(--accent);
   --color-accent-light: var(--accent-light);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-instrument-serif);
+  --color-signal: var(--signal);
+  --font-sans: var(--font-sans);
+  --font-display: var(--font-display);
+  --font-editorial: var(--font-editorial);
 }
 
 /* ─── Base ──────────────────────────────────────────────────────── */
@@ -42,7 +53,7 @@ html {
 body {
   background: var(--bg);
   color: var(--text-primary);
-  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -53,7 +64,7 @@ body {
   width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--bg);
+  background: var(--bg-surface);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--border);
@@ -66,7 +77,7 @@ body {
 /* ─── Selection ─────────────────────────────────────────────────── */
 ::selection {
   background: var(--accent);
-  color: #fff;
+  color: var(--bg);
 }
 
 /* ─── Focus ─────────────────────────────────────────────────────── */
@@ -77,55 +88,47 @@ body {
 }
 
 /* ─── Typography utilities ──────────────────────────────────────── */
-.display {
-  font-family: var(--font-instrument-serif), Georgia, serif;
-  font-style: italic;
-  font-weight: 400;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-}
 
-.mono-tag {
-  font-family: var(--font-geist-mono), 'Courier New', monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
+/* Bebas Neue — big headers, numerals, section titles */
+.display {
+  font-family: var(--font-display), 'Arial Black', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  line-height: 0.92;
   text-transform: uppercase;
 }
 
-/* ─── Gradient text ─────────────────────────────────────────────── */
-.gradient-text {
-  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-light) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* Playfair Display italic — editorial text, project titles, hero tagline */
+.editorial {
+  font-family: var(--font-editorial), Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
-/* ─── Noise overlay ─────────────────────────────────────────────── */
-.noise::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-  opacity: 0.03;
-  pointer-events: none;
-  z-index: 9999;
+/* Space Grotesk — labels, tags, metadata */
+.mono-tag {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
 }
 
-/* ─── Glow effects ──────────────────────────────────────────────── */
-.accent-glow {
-  box-shadow: 0 0 40px var(--accent-glow), 0 0 80px rgba(124, 58, 237, 0.05);
+/* ─── Rules ─────────────────────────────────────────────────────── */
+.section-rule {
+  height: 1px;
+  background: var(--border);
 }
 
-/* ─── Horizontal rule ───────────────────────────────────────────── */
+.section-rule-strong {
+  height: 2px;
+  background: var(--text-primary);
+}
+
+/* ─── Horizontal divider (faded) ────────────────────────────────── */
 .section-divider {
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--border), transparent);
-}
-
-/* ─── Grid background ───────────────────────────────────────────── */
-.grid-bg {
-  background-image:
-    linear-gradient(var(--border-subtle) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
-  background-size: 40px 40px;
 }
