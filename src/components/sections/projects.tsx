@@ -160,17 +160,19 @@ function ProjectRow({
             </motion.div>
           </div>
 
-          {/* Right meta — type + signal */}
+          {/* Right meta — type + signal (only show signal if distinct from type) */}
           <div className="hidden md:flex flex-col items-end gap-2 pt-1">
             <span className="mono-tag text-[var(--text-faint)]">{typeLabel}</span>
-            <span
-              className="mono-tag"
-              style={{
-                color: /^\d/.test(signal) ? "var(--signal)" : "var(--text-faint)",
-              }}
-            >
-              {signal}
-            </span>
+            {signal !== typeLabel && (
+              <span
+                className="mono-tag"
+                style={{
+                  color: /^\d/.test(signal) ? "var(--signal)" : "var(--text-faint)",
+                }}
+              >
+                {signal}
+              </span>
+            )}
           </div>
         </div>
       </div>
