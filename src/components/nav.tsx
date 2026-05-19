@@ -107,11 +107,11 @@ export default function Nav() {
               <span className="relative flex h-2 w-2">
                 <span
                   className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
-                  style={{ background: "var(--signal)" }}
+                  style={{ background: "#22c55e" }}
                 />
                 <span
                   className="relative inline-flex h-2 w-2 rounded-full"
-                  style={{ background: "var(--signal)" }}
+                  style={{ background: "#22c55e" }}
                 />
               </span>
               <span className="mono-tag text-[var(--text-faint)]">Available</span>
@@ -121,11 +121,11 @@ export default function Nav() {
             <span className="relative flex h-2 w-2 md:hidden">
               <span
                 className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
-                style={{ background: "var(--signal)" }}
+                style={{ background: "#22c55e" }}
               />
               <span
                 className="relative inline-flex h-2 w-2 rounded-full"
-                style={{ background: "var(--signal)" }}
+                style={{ background: "#22c55e" }}
               />
             </span>
             <button

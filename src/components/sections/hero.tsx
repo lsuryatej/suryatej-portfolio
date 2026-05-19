@@ -11,7 +11,7 @@ export default function Hero() {
           <div className="flex flex-col justify-center">
             <h1
               className="display text-[var(--text-primary)]"
-              style={{ fontSize: "clamp(4rem, 10vw, 8.5rem)" }}
+              style={{ fontSize: "clamp(2.8rem, 6.5vw, 5.5rem)" }}
             >
               Production ML.
               <br />
@@ -67,11 +67,11 @@ export default function Hero() {
                 <span className="relative flex h-2 w-2">
                   <span
                     className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-60"
-                    style={{ background: "var(--signal)" }}
+                    style={{ background: "#22c55e" }}
                   />
                   <span
                     className="relative inline-flex h-2 w-2 rounded-full"
-                    style={{ background: "var(--signal)" }}
+                    style={{ background: "#22c55e" }}
                   />
                 </span>
                 <p className="mono-tag text-[var(--text-muted)]">Available</p>
