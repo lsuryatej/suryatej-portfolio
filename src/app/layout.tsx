@@ -1,23 +1,23 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Playfair_Display, Geist_Mono, DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-geist-sans",
+const playfairDisplay = Playfair_Display({
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "700"],
+  style: ["normal", "italic"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+  variable: "--font-mono",
   subsets: ["latin"],
 });
 
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
+const dmSans = DM_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
+  weight: ["300", "400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Suryatej Lalam" }],
   openGraph: {
     title: "Suryatej Lalam | ML Engineer",
-    description: "Building intelligent systems. Occasionally, creative ones.",
+    description: "Building production ML systems. Fraud models, ETL pipelines, knowledge graphs.",
     type: "website",
   },
 };
@@ -41,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${plusJakartaSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased noise`}
+        className={`${playfairDisplay.variable} ${geistMono.variable} ${dmSans.variable} antialiased`}
       >
         {children}
       </body>

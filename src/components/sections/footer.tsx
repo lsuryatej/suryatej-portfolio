@@ -1,71 +1,96 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Github, Linkedin } from "lucide-react";
 import { personal } from "@/lib/data";
 
 export default function Footer() {
   return (
-    <footer className="py-20">
-      <div className="section-divider mb-20" />
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="flex flex-col items-center gap-10 text-center">
-          {/* CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <p className="mono-tag mb-4 text-[var(--accent-light)]">Let&apos;s connect</p>
-            <h2 className="display text-[clamp(2rem,5vw,4rem)] text-[var(--text-primary)]">
-              Got something in mind?
-            </h2>
-          </motion.div>
+    <footer
+      style={{
+        paddingTop: "3rem",
+        paddingBottom: "3rem",
+        paddingLeft: "3rem",
+        paddingRight: "3rem",
+      }}
+    >
+      {/* Top rule */}
+      <div className="section-rule mb-8" />
 
-          <motion.a
-            href={`mailto:${personal.email}`}
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="group flex items-center gap-2 text-xl text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
-          >
-            <Mail size={20} />
-            <span className="underline-offset-4 group-hover:underline">{personal.email}</span>
-          </motion.a>
+      {/* Business card row */}
+      <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+        <span
+          className="mono-tag"
+          style={{ color: "var(--text-faint)" }}
+        >
+          {personal.name}
+        </span>
+        <span
+          className="mono-tag"
+          style={{ color: "var(--text-faint)" }}
+        >
+          Hyderabad, India
+        </span>
+        <a
+          href={`mailto:${personal.email}`}
+          className="mono-tag"
+          style={{
+            color: "var(--text-faint)",
+            transition: "color 200ms ease-out",
+          }}
+          onMouseEnter={(e) =>
+            ((e.currentTarget as HTMLElement).style.color = "var(--text-muted)")
+          }
+          onMouseLeave={(e) =>
+            ((e.currentTarget as HTMLElement).style.color = "var(--text-faint)")
+          }
+        >
+          {personal.email}
+        </a>
+        <span
+          className="mono-tag"
+          style={{ color: "var(--text-faint)" }}
+        >
+          {new Date().getFullYear()}
+        </span>
 
-          {/* Socials */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex items-center gap-6"
+        {/* Social icons */}
+        <div className="flex items-center gap-4 ml-auto">
+          <a
+            href={personal.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+            style={{
+              color: "var(--text-faint)",
+              transition: "color 200ms ease-out",
+            }}
+            onMouseEnter={(e) =>
+              ((e.currentTarget as HTMLElement).style.color = "var(--text-muted)")
+            }
+            onMouseLeave={(e) =>
+              ((e.currentTarget as HTMLElement).style.color = "var(--text-faint)")
+            }
           >
-            <a
-              href={personal.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
-            >
-              <Github size={20} />
-            </a>
-            <a
-              href={personal.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--text-muted)] transition-colors hover:text-[var(--text-primary)]"
-            >
-              <Linkedin size={20} />
-            </a>
-          </motion.div>
-
-          {/* Bottom */}
-          <div className="section-divider w-full" />
-          <p className="mono-tag text-[var(--text-faint)]">
-            © {new Date().getFullYear()} {personal.name}
-          </p>
+            <Github size={14} />
+          </a>
+          <a
+            href={personal.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn"
+            style={{
+              color: "var(--text-faint)",
+              transition: "color 200ms ease-out",
+            }}
+            onMouseEnter={(e) =>
+              ((e.currentTarget as HTMLElement).style.color = "var(--text-muted)")
+            }
+            onMouseLeave={(e) =>
+              ((e.currentTarget as HTMLElement).style.color = "var(--text-faint)")
+            }
+          >
+            <Linkedin size={14} />
+          </a>
         </div>
       </div>
     </footer>
