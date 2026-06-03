@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Geist_Mono, Instrument_Serif } from "next/font/google";
+import { Analytics } from '@vercel/analytics/next';
 import "./globals.css";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -44,6 +45,7 @@ export default function RootLayout({
         className={`${plusJakartaSans.variable} ${geistMono.variable} ${instrumentSerif.variable} antialiased noise`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
